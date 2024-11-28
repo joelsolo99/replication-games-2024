@@ -1,5 +1,5 @@
 # These are all the packages used across all the analysis scripts, feel free to remove whichever ones you don't need. 
-cran_packages <- c("tidyverse", "sjstats", "foreach", "doParallel", "rstan", "devtools")
+cran_packages <- c("tidyverse", "sjstats", "foreach", "doParallel", "rstan", "devtools", "geoveg", "lsr")
 
 # Install missing CRAN packages
 for (pkg in cran_packages) {
