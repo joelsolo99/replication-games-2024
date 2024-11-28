@@ -15,7 +15,7 @@ if (!"eyetrackingR" %in% installed.packages()[, "Package"]) {
 }
 
 
-# Some of the packages have to be installed from source (at least on my system)
+# Some of the packages have to be installed from source (at least on Linux, apologies if this slows you down slightly for no reason)
 
 # Install goeveg if not already installed
 if (!"goeveg" %in% installed.packages()[, "Package"]) {
