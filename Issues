@@ -1,6 +1,0 @@
-Issues:
-
-PLT_HUMAN: I had to change some of the file paths to reflect folder names in caps
-Could be due to case sensitivitty in Linux but not in Windows
-
-Lines 772, 781 do not work

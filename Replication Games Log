@@ -1,0 +1,10 @@
+---Issues---
+
+PLT_HUMAN: I had to change some of the file paths to reflect folder names in caps
+Could be due to case sensitivitty in Linux but not in Windows
+
+Lines 772, 781 do not work
+
+---Comments---
+
+I don't understand why rstan has been used: rstan is for Bayesian modelling yet no Bayesian models are fit: has something been removed?
