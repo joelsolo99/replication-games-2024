@@ -723,7 +723,7 @@ timecourse_age_LT <- function(time_prop_df,alpha=.05,thres=NA,clustermass=F,n_sa
 #### DATA ####
 
 ## Stimuli ##
-stim_size <- read.table(paste0(getwd(), '/stimuli/PLT/HUMAN/bodies_distance.csv'),header=T,sep=',')
+stim_size <- read.table(paste0(getwd(), '/STIMULI/PLT/HUMAN/bodies_distance.csv'),header=T,sep=',')
 t.test(stim_size$facing,stim_size$nonfacing,var.equal=T)
 
 ## 7mo bodies ##
@@ -765,11 +765,11 @@ foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
            'correctside')} -> bigDF.7mo.bodies
 bigDF.7mo.bodies$ID <- as.factor(bigDF.7mo.bodies$ID)
 levels(bigDF.7mo.bodies$ID) <- seq(1,length(unique(bigDF.7mo.bodies$ID)))
-info_7mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_7mo/infos_bb.xlsx'))
+info_7mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_7mo/infos_bb.xlsx'))
 unique(bigDF.7mo.bodies$file)
 unique(info_7mo_bodies$file)
 info_7mo_bodies$age_weeks <- difftime(info_7mo_bodies$test,info_7mo_bodies$birth,units="weeks")
-info_7mo_bodies$age_days <- difftime(info_7mo_bodies$test,info_7mo_bodies$birth,units="days")
+info_7mo_bodies$age_days <- difftime(info_7mo_bodies$test,info_7mo_bodies$birth,units="days") # Warnings from this code 
 table(info_7mo_bodies$inclusion)
 table(info_7mo_bodies$gender[info_7mo_bodies$inclusion==1])
 min(info_7mo_bodies$months[info_7mo_bodies$inclusion==1])
@@ -777,7 +777,7 @@ max(info_7mo_bodies$months[info_7mo_bodies$inclusion==1])
 (days_7mo <- round(psych::describe(as.numeric(info_7mo_bodies$age_days[info_7mo_bodies$inclusion==1]))))
 as.Date('30/11/1999','%d/%m/%Y') + days_7mo$mean # from the rational of =DATEDIF(DATE(2020,0,0),DATE(2020,0,L27),"m")&" mois, et "&DATEDIF(DATE(2020,0,0),DATE(2020,0,L27),"md")&" jour."
 info_7mo_bodies%>%mutate(withStudy=ifelse(orderStudy=='withStudy',1,0))%>%select(file,withStudy,age_days,age_weeks)->info_7mo_bodies
-bigDF.7mo.bodies%>%left_join(info_7mo_bodies,by=c('file'))->bigDF.7mo.bodies
+bigDF.7mo.bodies%>%left_join(info_7mo_bodies,by=c('file'))->bigDF.7mo.bodies #  This line does not run
 sum(is.na(bigDF.7mo.bodies$age_days))
 
 ## 10mo ##
