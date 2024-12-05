@@ -134,9 +134,15 @@ droplevels(diff_df %>% filter(Subject %notin% outlier_subjects_df$Subject)) -> d
 diff_df[is.na(diff_df)] <- 0
 
 
+
+# Perform the binomial test: this is what they actually did
+binom_test <- binom.test(13, 15, p = 0.5, alternative = "two.sided")
+
+# This is what we think they should have done
+
 # Ungroup the data and count the number of trials
 binom_counts <- diff_df %>%
-  ungroup() %>%  # Remove grouping to summarize across all data
+  ungroup() %>%  # Remove grouping to summarise across all data
   summarise(
     facing_greater = sum(facing > facing_away),
     facing_away_greater = sum(facing < facing_away)
@@ -147,10 +153,7 @@ facing_greater <- binom_counts$facing_greater
 facing_away_greater <- binom_counts$facing_away_greater
 total_trials <- facing_greater + facing_away_greater
 
-# Perform the binomial test
 binom_test <- binom.test(facing_greater, total_trials, p = 0.5, alternative = "two.sided")
-
-
 
 # Calculate difference in looking times and summarise
 diff_df %>% mutate(Difference = (facing - facing_away) / (facing + facing_away)) -> diff_df
@@ -162,9 +165,8 @@ diff_df %>%
   summarise(Difference = mean(Difference)) -> diff_df
 
 
-# This test seemed to be missing from the code but was reported in the data
-t.test(diff_df$Difference, mu = 0, data = diff_df)
-cohen.d(diff_df$Difference ~ diff_df$Group)
+
+
 
 
 diff_df %>%
