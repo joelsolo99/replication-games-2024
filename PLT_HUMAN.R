@@ -723,18 +723,18 @@ timecourse_age_LT <- function(time_prop_df,alpha=.05,thres=NA,clustermass=F,n_sa
 #### DATA ####
 
 ## Stimuli ##
-stim_size <- read.table(paste0(getwd(), '/stimuli/PLT/HUMAN/bodies_distance.csv'),header=T,sep=',')
+stim_size <- read.table(paste0(getwd(), '/STIMULI/PLT/HUMAN/bodies_distance.csv'),header=T,sep=',')
 t.test(stim_size$facing,stim_size$nonfacing,var.equal=T)
 
 ## 7mo bodies ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_7mo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_7mo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   # ID <- gsub(".*-(.+)-.*", "\\1", f)
   ID <- gsub("-.*", "\\1", f)
   # print(f)
   # print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_7mo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_7mo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -765,7 +765,7 @@ foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
            'correctside')} -> bigDF.7mo.bodies
 bigDF.7mo.bodies$ID <- as.factor(bigDF.7mo.bodies$ID)
 levels(bigDF.7mo.bodies$ID) <- seq(1,length(unique(bigDF.7mo.bodies$ID)))
-info_7mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_7mo/infos_bb.xlsx'))
+info_7mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_7mo/infos_bb.xlsx'))
 unique(bigDF.7mo.bodies$file)
 unique(info_7mo_bodies$file)
 info_7mo_bodies$age_weeks <- difftime(info_7mo_bodies$test,info_7mo_bodies$birth,units="weeks")
@@ -781,7 +781,7 @@ bigDF.7mo.bodies%>%left_join(info_7mo_bodies,by=c('file'))->bigDF.7mo.bodies
 sum(is.na(bigDF.7mo.bodies$age_days))
 
 ## 10mo ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_10mo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_10mo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # for (f in filenames) {
   # f=filenames[1]
@@ -789,7 +789,7 @@ foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   ID <- gsub("-.*", "\\1", f)
   # print(f)
   # print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_10mo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_10mo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -822,7 +822,7 @@ bigDF.10mo.bodies$ID <- as.factor(bigDF.10mo.bodies$ID)
 levels(bigDF.10mo.bodies$ID) <- seq(max(as.numeric(as.character((bigDF.7mo.bodies$ID))))+1,
                                     max(as.numeric(as.character((bigDF.7mo.bodies$ID))))+
                                       length(unique(bigDF.10mo.bodies$ID)))
-info_10mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_10mo/infos_bb.xlsx'))
+info_10mo_bodies <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_10mo/infos_bb.xlsx'))
 unique(bigDF.10mo.bodies$file)
 unique(info_10mo_bodies$file)
 info_10mo_bodies$age_weeks <- difftime(info_10mo_bodies$test,info_10mo_bodies$birth,units="weeks")
@@ -838,14 +838,14 @@ bigDF.10mo.bodies%>%left_join(info_10mo_bodies,by=c('file'))->bigDF.10mo.bodies
 sum(is.na(bigDF.10mo.bodies$age_days))
 
 ## 15mo ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_15mo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_15mo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   # ID <- gsub(".*-(.+)-.*", "\\1", f)
   ID <- gsub("-.*", "\\1", f)
   print(f)
   print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_15mo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_15mo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -878,7 +878,7 @@ bigDF.15mo.bodies$ID <- as.factor(bigDF.15mo.bodies$ID)
 levels(bigDF.15mo.bodies$ID) <- seq(max(as.numeric(as.character((bigDF.10mo.bodies$ID))))+1,
                                     max(as.numeric(as.character((bigDF.10mo.bodies$ID))))+
                                       length(unique(bigDF.15mo.bodies$ID))) # 19-2-1524 = 95 (reported as fussy)
-info_15mo_bodies <- readxl::read_xlsx(paste0('data_raw/plt_15mo/infos_bb.xlsx'))
+info_15mo_bodies <- readxl::read_xlsx(paste0('DATA_RAW/plt_15mo/infos_bb.xlsx'))
 unique(bigDF.15mo.bodies$file)
 unique(info_15mo_bodies$file)
 info_15mo_bodies$age_weeks <- difftime(info_15mo_bodies$test,info_15mo_bodies$birth,units="weeks")
@@ -894,14 +894,14 @@ bigDF.15mo.bodies%>%left_join(info_15mo_bodies,by=c('file'))->bigDF.15mo.bodies
 sum(is.na(bigDF.15mo.bodies$age_days))
 
 ## 18mo ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_18mo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_18mo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   # ID <- gsub(".*-(.+)-.*", "\\1", f)
   ID <- gsub("-.*", "\\1", f)
   print(f)
   print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_18mo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_18mo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -934,7 +934,7 @@ bigDF.18mo.bodies$ID <- as.factor(bigDF.18mo.bodies$ID)
 levels(bigDF.18mo.bodies$ID) <- seq(max(as.numeric(as.character((bigDF.15mo.bodies$ID))))+1,
                                     max(as.numeric(as.character((bigDF.15mo.bodies$ID))))+
                                       length(unique(bigDF.18mo.bodies$ID)))
-info_18mo_bodies <- readxl::read_xlsx(paste0('data_raw/plt_18mo/infos_bb.xlsx'))
+info_18mo_bodies <- readxl::read_xlsx(paste0('DATA_RAW/plt_18mo/infos_bb.xlsx'))
 unique(bigDF.18mo.bodies$file)
 unique(info_18mo_bodies$file)
 info_18mo_bodies$age_weeks <- difftime(info_18mo_bodies$test,info_18mo_bodies$birth,units="weeks")
@@ -950,14 +950,14 @@ bigDF.18mo.bodies%>%left_join(info_18mo_bodies,by=c('file'))->bigDF.18mo.bodies
 sum(is.na(info_18mo_bodies$age_days))
 
 ## 3yo ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_3yo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_3yo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   # ID <- gsub(".*-(.+)-.*", "\\1", f)
   ID <- gsub("-.*", "\\1", f)
   print(f)
   print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_3yo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_3yo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -990,7 +990,7 @@ bigDF.3yo.bodies$ID <- as.factor(bigDF.3yo.bodies$ID)
 levels(bigDF.3yo.bodies$ID) <- seq(max(as.numeric(as.character((bigDF.18mo.bodies$ID))))+1,
                                    max(as.numeric(as.character((bigDF.18mo.bodies$ID))))+
                                      length(unique(bigDF.3yo.bodies$ID)))
-info_3yo_bodies <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_3yo/infos_bb.xlsx'))
+info_3yo_bodies <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_3yo/infos_bb.xlsx'))
 unique(bigDF.3yo.bodies$file)
 unique(info_3yo_bodies$file)
 table(info_3yo_bodies$inclusion)
@@ -1007,14 +1007,14 @@ sum(is.na(info_3yo_bodies$age_days))
 bigDF.3yo.bodies%>%group_by(file,ID)%>%summarise(age=unique(age),age_days=unique(age_days))
 
 ## 5yo ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_5yo'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_5yo'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   # ID <- gsub(".*-(.+)-.*", "\\1", f)
   ID <- gsub("-.*", "\\1", f)
   print(f)
   print(ID)
-  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/data_raw/plt_5yo/', f, sep=''), sep="\t")[1:28]))
+  raw.data <- data.frame(cbind(f, read.table(paste(getwd(),'/DATA_RAW/plt_5yo/', f, sep=''), sep="\t")[1:28]))
   colnames(raw.data) <- list('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside')
   
   ## Include events in the eye-T dataframe ##
@@ -1047,7 +1047,7 @@ bigDF.5yo.bodies$ID <- as.factor(bigDF.5yo.bodies$ID)
 levels(bigDF.5yo.bodies$ID) <- seq(max(as.numeric(as.character((bigDF.3yo.bodies$ID))))+1,
                                    max(as.numeric(as.character((bigDF.3yo.bodies$ID))))+
                                      length(unique(bigDF.5yo.bodies$ID)))
-info_5yo_bodies <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_3yo/infos_bb.xlsx'))
+info_5yo_bodies <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_3yo/infos_bb.xlsx'))
 unique(bigDF.5yo.bodies$file)
 unique(info_5yo_bodies$file)
 setdiff(unique(bigDF.5yo.bodies$file),unique(info_5yo_bodies$file))
@@ -1066,25 +1066,25 @@ bigDF.5yo.bodies%>%group_by(ID)%>%summarise(age=unique(age),age_days=unique(age_
 unique(bigDF.5yo.bodies$ID[is.na(bigDF.5yo.bodies$age_days)])
 
 ## adults ##
-filenames <- list.files(paste0(getwd(), '/data_raw/plt_adult'), pattern='*.topd')
+filenames <- list.files(paste0(getwd(), '/DATA_RAW/plt_adult'), pattern='*.topd')
 foreach (f=filenames, .combine=rbind.data.frame,.packages='dplyr') %dopar% {
   # f=filenames[1]
   ID <- gsub(".*-(.+)-.*", "\\1", f)
   # ID <- gsub("-.*", "\\1", f)
   # print(f)
   # print(ID)
-  raw.data <- data.frame(cbind(ID, read.table(paste0(getwd(), '/data_raw/plt_adult', '/', f), sep="\t"))[1:31])
+  raw.data <- data.frame(cbind(ID, read.table(paste0(getwd(), '/DATA_RAW/plt_adult', '/', f), sep="\t"))[1:31])
   colnames(raw.data) <- 
     c('ID', '#T2TGazeTime', 'RemoteTime', 'LineNum', 'GazeCounter', 'GazepointX (L)', 'GazepointY (L)', 'CamX (L)', 'CamY (L)', 'Distance (L)', 'Pupil (L)', 'Validity (L)', 'GazepointX (R)', 'GazepointY (R)', 'CamX (R)', 'CamY (R)', 'Distance (R)', 'Pupil (R)', 'Validity (R)', 'GazepointX (M)', 'GazepointY (M)', 'Pupil (M)', 'Validity (S)', 'FixationID', 'FixationX', 'FixationY', 'FixationConfidence', 'ev', 'correctside', 'condition', 'ssresponse')
   
   ## Stimuli lists ##
-  stim.list.part1 <- cbind('part1', read.table(paste0(getwd(),'/data_raw/plt_adult/stim_list/xp_part1/list', ID), sep='\t'))
+  stim.list.part1 <- cbind('part1', read.table(paste0(getwd(),'/DATA_RAW/plt_adult/stim_list/xp_part1/list', ID), sep='\t'))
   colnames(stim.list.part1) <- c('part','stim1', 'stim2', 'facingside', 'condition')
-  stim.list.part2 <- cbind('part2', NA, read.table(paste0(getwd(),'/data_raw/plt_adult/stim_list/xp_part2/list', ID), sep='\t'))
+  stim.list.part2 <- cbind('part2', NA, read.table(paste0(getwd(),'/DATA_RAW/plt_adult/stim_list/xp_part2/list', ID), sep='\t'))
   colnames(stim.list.part2) <- c('part','stim1', 'stim2', 'facingside', 'condition')
   stim.list <- rbind(stim.list.part1, stim.list.part2[1:16,])
   
-  ## Include events and stimuli in the eye-T dataframe ##
+  ## Include events and STIMULI in the eye-T dataframe ##
   raw.data %>% mutate(ev.n=ifelse(ev == 'p' & lag(ev) == 'f', 1,
                                   ifelse(ev == 'f' & lag(ev) == 'p', 2, 0))) -> raw.data
   raw.data$stim1 <- NA
@@ -1124,7 +1124,7 @@ levels(bigDF.adults$ID) <- seq(max(as.numeric(as.character((bigDF.5yo.bodies$ID)
 bigDF.adults$withStudy <- 0
 bigDF.adults$age_days <- NA
 bigDF.adults$age_weeks <- NA
-info_adults <- readxl::read_xlsx(paste0(getwd(),'/data_raw/plt_adult/infos_adults.xlsx'))
+info_adults <- readxl::read_xlsx(paste0(getwd(),'/DATA_RAW/plt_adult/infos_adults.xlsx'))
 unique(bigDF.adults$file)
 unique(info_adults$file)
 setdiff(unique(bigDF.adults$file),unique(info_adults$file))
@@ -1421,12 +1421,12 @@ ET_diff_new(ET.data.clean.prop.seq,group1,group2,agg_trial=T,all=T,return_plot=F
 perm_test_rslts <- perm_test_ttest(ET_diff_df,threshold=threshold,n_samples=n_samples,paired=T,'two.sided',chance=F,mu=0,gap=gap,tbin=tbin)
 # load(file=paste0(getwd(),'/RESULTS/PLT/HUMAN/perm_test_adults_diff_ttest.RData')) # Reported analysis
 
-# Upright stimuli #
+# Upright STIMULI #
 ET_diff_df.group1 <- droplevels(subset(ET_diff_df,AOI==group1))
 perm_test_rslts <- perm_test_ttest(ET_diff_df.group1,threshold=threshold,n_samples=n_samples,paired=F,'two.sided',chance=T,mu=0,gap=gap,tbin=tbin)
 # load(file=paste0(getwd(),'/RESULTS/PLT/HUMAN/perm_test_adults_up_ttest.RData')) # Reported analysis
 
-# Inverted stimuli #
+# Inverted STIMULI #
 ET_diff_df.group2 <- droplevels(subset(ET_diff_df,AOI==group2))
 perm_test_rslts <- perm_test_ttest(ET_diff_df.group2,threshold=threshold,n_samples=n_samples,paired=F,'two.sided',chance=T,mu=0,gap=gap,tbin=tbin)
 # load(file=paste0(getwd(),'/RESULTS/PLT/HUMAN/perm_test_adults_inv_ttest.RData')) # Reported analysis
