@@ -119,6 +119,13 @@ trial_rej_df %>% mutate(outlier = ifelse(included < 2, TRUE, FALSE)) %>% filter(
 ## Differential looking times ##
 # Filter data to include only specific levels of 'BodiesRelation'
 droplevels(dur_df %>% filter(BodiesRelation %in% c('facing', 'facing_away'))) -> diff_df
+
+
+# Run a paired t-test
+paired_t_test <- t.test(wide_df$facing, wide_df$facing_away, paired = TRUE)
+
+
+
 # Reshape data for comparisons and remove outliers
 diff_df %>% tidyr::spread(BodiesRelation, Duration) -> diff_df
 diff_df %>% mutate(Trial_Subject = paste0(Trial, Subject)) -> diff_df
@@ -126,11 +133,40 @@ droplevels(diff_df %>% filter(Trial_Subject %notin% outlier_trials_df$Trial_ID))
 droplevels(diff_df %>% filter(Subject %notin% outlier_subjects_df$Subject)) -> diff_df
 diff_df[is.na(diff_df)] <- 0
 
+
+# Ungroup the data and count the number of trials
+binom_counts <- diff_df %>%
+  ungroup() %>%  # Remove grouping to summarize across all data
+  summarise(
+    facing_greater = sum(facing > facing_away),
+    facing_away_greater = sum(facing < facing_away)
+  )
+
+# Extract counts
+facing_greater <- binom_counts$facing_greater
+facing_away_greater <- binom_counts$facing_away_greater
+total_trials <- facing_greater + facing_away_greater
+
+# Perform the binomial test
+binom_test <- binom.test(facing_greater, total_trials, p = 0.5, alternative = "two.sided")
+
+
+
 # Calculate difference in looking times and summarise
 diff_df %>% mutate(Difference = (facing - facing_away) / (facing + facing_away)) -> diff_df
+
+
+
 diff_df %>%
   group_by(Group, Subject) %>%
   summarise(Difference = mean(Difference)) -> diff_df
+
+
+# This test seemed to be missing from the code but was reported in the data
+t.test(diff_df$Difference, mu = 0, data = diff_df)
+cohen.d(diff_df$Difference ~ diff_df$Group)
+
+
 diff_df %>%
   ungroup %>%
   summarise(N = n(), M = mean(Difference), sd = sd(Difference), sem = goeveg::sem(Difference)) %>%
